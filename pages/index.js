@@ -1,9 +1,26 @@
 import Head from 'next/head'
 import { useState } from 'react'
+import axios from 'axios'
+import {FcSearch} from 'react-icons/fc'
+
 
 export default function Home() {
 const [cityName, setCityName] = useState('')
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=bhiwani&appid={process.env.NEXT_PUBLIC_WEATHER_KEY}`
+const [loading , setLoading] = useState(false)
+const [weather , setWeather] = useState({})
+   const url = `https://api.openweathermap.org/data/2.5/weather?q=bhiwani&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`
+
+   const fetchApi = (e) => {
+e.preventDefault()
+setLoading(true)
+axios.get(url).then((response) =>{
+  console.log(response.data)
+  setWeather(response.data)
+}
+
+)
+setLoading(false)
+   }
 
   return (
     <div>
@@ -13,9 +30,7 @@ const [cityName, setCityName] = useState('')
         <link rel="icon" href="/favicon.ico" />
       </Head>
 <h1>NEXT JS App</h1>
-
-<input type="text" value={cityName} onChange={e=>setCityName(e.target.value)} />
-      
+<button onClick={fetchApi}>Get Weather</button>
     </div>
   )
 }
